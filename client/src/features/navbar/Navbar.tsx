@@ -9,10 +9,12 @@ import { useNavigate } from "react-router-dom";
 
 import { SearchBar } from "./SearchBar";
 import { ThemeToggler } from "./ThemeToggler";
+import { useAuth } from "../auth/AuthContext";
 
 export const Navbar = () => {
   const navigate = useNavigate();
-
+  const { user, logout } = useAuth()
+  console.log("navbar user:", user);
   return (
     <Group
       justify="space-between"
@@ -41,7 +43,11 @@ export const Navbar = () => {
             Cart
           </Button>
         </Indicator>
-
+      {!user?(
+        <Button onClick={()=>navigate("/login")}>
+          login
+        </Button>
+      ):(
         <Menu shadow="md" width={200}>
           <Menu.Target>
             <Button
@@ -49,8 +55,10 @@ export const Navbar = () => {
               rightSection={<IconChevronDown size={16} />}
             >
               <Group gap="xs">
-                <Avatar src="" alt="User" size="sm" />
-                <Text size="sm">User</Text>
+                <Avatar src={user?.image} alt="User" size="sm" />
+                <Text size="sm">
+                  {user?.firstName?? user?.username}
+                </Text>
               </Group>
             </Button>
           </Menu.Target>
@@ -67,12 +75,29 @@ export const Navbar = () => {
             <Menu.Item
               leftSection={<IconLogout size={16} />}
               color="red"
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                logout();
+                navigate("/login")
+              }}
             >
               Logout
             </Menu.Item>
+
+
+            {/* <Menu.Item
+              leftSection={<IconLogout size={16} />}
+              color="red"
+
+              onClick={() => { navigate("/login") }}
+            >
+              Login
+            </Menu.Item> */}
           </Menu.Dropdown>
+
+
+
         </Menu>
+      )}
       </Group>
     </Group>
   );

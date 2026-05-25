@@ -10,6 +10,7 @@ export const ThemeToggler = () => {
       radius="md"
       aria-label="Toggle color scheme"
     >
+      
       <IconMoon size={20} stroke={1.5} />
     </ActionIcon>
   );

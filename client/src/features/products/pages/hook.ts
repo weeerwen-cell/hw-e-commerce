@@ -12,7 +12,6 @@ export const useProducts = ()=>{
 
 }
 
-
 export const useProduct =(id:number)=>{
 
     return useQuery({
@@ -28,5 +27,6 @@ export const useCategories = () => {
     queryFn: fetchProducts,
     select: (data) =>
       Array.from(new Set(data.products.map((p) => p.category))),
+    //only get unique 
   });
 };

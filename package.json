@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "@mantine/form": "^9.2.1",
+    "react-hook-form": "^7.76.1",
+    "zod": "^4.4.3"
+  }
+}
