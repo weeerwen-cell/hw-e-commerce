@@ -1,34 +1,22 @@
 
-// cart/cartApi.ts
+import type { Cart, CartResponse } from "./cartType";
 
-export type CartItem = {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-};
+export const removeCartItemApi = async (
+  cartId: number,
+  productId: number
+): Promise<Cart[]> => {
+  const res = await fetch("https://dummyjson.com/carts/user/1");
 
+  const data: CartResponse = await res.json();
 
-let mockCart: CartItem[] = [
-  { id: 113, name: "Product #113", price: 3999.99, quantity: 3 },
-  { id: 122, name: "Product #122", price: 299.99, quantity: 3 },
-  { id: 138, name: "Product #138", price: 8.99, quantity: 2 },
-  { id: 162, name: "Product #162", price: 8.99, quantity: 2 },
-];
+  const updated = data.carts.map((cart) => {
+    if (cart.id !== cartId) return cart;
 
-// GET CART
-export const fetchCart = async (): Promise<CartItem[]> => {
-  return mockCart;
-};
+    return {
+      ...cart,
+      products: cart.products.filter((p) => p.id !== productId),
+    };
+  });
 
-// REMOVE ITEM
-export const removeCartItem = async (id: number): Promise<CartItem[]> => {
-  mockCart = mockCart.filter(item => item.id !== id);
-  return mockCart;
-};
-
-// CLEAR CART
-export const clearCart = async (): Promise<CartItem[]> => {
-  mockCart = [];
-  return mockCart;
+  return updated;
 };

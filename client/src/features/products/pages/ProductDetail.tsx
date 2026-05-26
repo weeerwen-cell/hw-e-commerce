@@ -9,17 +9,41 @@ import {
   Title,
 } from "@mantine/core";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProduct } from "./hook";
+import { useProduct,  } from "./hook";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {addCartApi} from "./api"
 
 
 const ProductDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams()
   const productId = Number(id)
+  console.log(productId);
 
-  const { data, isLoading, isError, error } = useProduct(productId)
+
+const querlyClient  = useQueryClient()
+  const { data, isLoading, isError:isProductError, error:productError } = useProduct(productId)
+
+  const {mutate, isError, error} = useMutation({
+    mutationFn: addCartApi,
+    onSuccess:(cartData)=>{
+      console.log("successful");
+
+      querlyClient.setQueryData(["cart"], cartData);
+       
+    },
+    onError: (err)=>{
+      console.log("add cart fail", err);
+      
+    }
+  })
+
+
+// console.log("hello");
+// localStorage.getItem("token")
+
   if (isLoading) return <Text>Loading...</Text>;
-  if (isError) return <Text>{error.message}</Text>;
+  if (isProductError) return <Text>{productError.message}</Text>;
   return (
     <Container size="lg" py="xl">
       <Grid>
@@ -49,7 +73,23 @@ const ProductDetail = () => {
             {data?.stock} units avaliable
           </Text>
           <Group>
-            <Button size="lg">Add to Cart</Button>
+            <Button size="lg"
+            onClick={()=>{
+              const token = localStorage.getItem("token");
+            if(!token){
+              navigate("/login")
+              return;
+            }
+            if(!data) return
+              mutate({
+                id: data?.id,
+                title: data?.title,
+                price:data?.price,
+               
+              }) }
+            }
+            >Add to Cart</Button>
+
             <Button
               size="lg"
               variant="outline"

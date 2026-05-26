@@ -10,7 +10,8 @@ import Cart from "../features/cart/pages/Cart";
 import Login from "../features/auth/pages/Login";
 import Signup from "../features/auth/pages/Signup";
 import Settings from "../features/settings/pages/Settings";
-
+import ProtectRouter from "./ProtectedRouter";
+import { authLoader } from "./ProtectedRouteLoader";
 export const router = createHashRouter([
   {
     path: "/",
@@ -27,7 +28,11 @@ export const router = createHashRouter([
       { path: "signup", element: <Signup /> },
       {
         path: "cart",
-        element: <Cart />,
+        element: (
+          <ProtectRouter>
+            <Cart />
+          </ProtectRouter>
+          ),
       },
       {
         path: "settings",

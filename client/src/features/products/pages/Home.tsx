@@ -12,8 +12,8 @@ import {
 
 import HomeInfoSection from "../../../components/home/HomeInfoSection";
 import { useNavigate } from "react-router-dom";
-import { useProduct } from "../pages/hook";
-
+import { useProducts } from "../pages/hook";
+import type { Product } from "./type";
 const Home = () => {
   return (
     <Container size="xl" py="xl">
@@ -34,102 +34,67 @@ const Home = () => {
 };
 
 const Recommendations = () => {
+  const navigate = useNavigate();
 
- const navigate = useNavigate(); 
-const {data, isLoading} = useProduct();
+  
+  const { data, isLoading, isError } = useProducts("");
 
-if(isLoading) return <Text>Loading...</Text>
-const products =data?.products.slice(0,3)
+  if (isLoading) return <Text>Loading...</Text>;
+  if (isError) return <Text>Failed to load products</Text>;
+
+  const products = data?.products?.slice(0, 4) ?? [];
 
   return (
     <Box mb="xl">
       <Title order={2} mb="md">
         ✨ Recommended for You
       </Title>
+
       <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="md">
-        <Card
-          onClick={()=>navigate("/products/1")}
-          shadow="sm"
-          padding="lg"
-          radius="md"
-          withBorder
-          style={{ cursor: "pointer", height: "100%" }}
-        >
-          <Card.Section>
-            <Image
-              src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
-              height={160}
-              alt="Essence Mascara Lash Princess"
-            />
-          </Card.Section>
+        {products.map((product:Product) => (
+          <Card
+            key={product.id}
+            onClick={() => navigate(`/products/${product.id}`)}
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            withBorder
+            style={{ cursor: "pointer", height: "100%" }}
+          >
+            <Card.Section>
+              <Image
+                src={product.thumbnail}
+                height={160}
+                alt={product.title}
+              />
+            </Card.Section>
 
-          <Group justify="space-between" mt="md" mb="xs">
-            <Text fw={500} lineClamp={1}>
-              Essence Mascara Lash Princess
-            </Text>
-          </Group>
+            <Group justify="space-between" mt="md" mb="xs">
+              <Text fw={500} lineClamp={1}>
+                {product.title}
+              </Text>
+            </Group>
 
-          <Group justify="space-between">
-            <Text size="xl" fw={700} c="blue">
-              $9.99
-            </Text>
-            <Badge color="red" variant="filled">
-              -10%
-            </Badge>
-          </Group>
+            <Group justify="space-between">
+              <Text size="xl" fw={700} c="blue">
+                ${product.price}
+              </Text>
 
-          <Group gap={4} mt="xs">
-            <Text size="sm" c="dimmed">
-              ⭐ 2.56
-            </Text>
-            <Text size="sm" c="dimmed">
-              • 99 in stock
-            </Text>
-          </Group>
-        </Card>
-      </SimpleGrid>
+              <Badge color="red" variant="filled">
+                -10%
+              </Badge>
+            </Group>
 
-        <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="md">
-        <Card
-          onClick={()=>navigate("/products/1")}
-          shadow="sm"
-          padding="lg"
-          radius="md"
-          withBorder
-          style={{ cursor: "pointer", height: "100%" }}
-        >
-          <Card.Section>
-            <Image
-              src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
-              height={160}
-              alt="Essence Mascara Lash Princess"
-            />
-          </Card.Section>
-
-          <Group justify="space-between" mt="md" mb="xs">
-            <Text fw={500} lineClamp={1}>
-              Essence Mascara Lash Princess
-            </Text>
-          </Group>
-
-          <Group justify="space-between">
-            <Text size="xl" fw={700} c="blue">
-              $9.99
-            </Text>
-            <Badge color="red" variant="filled">
-              -10%
-            </Badge>
-          </Group>
-
-          <Group gap={4} mt="xs">
-            <Text size="sm" c="dimmed">
-              ⭐ 2.56
-            </Text>
-            <Text size="sm" c="dimmed">
-              • 99 in stock
-            </Text>
-          </Group>
-        </Card>
+            <Group gap={4} mt="xs">
+              <Text size="sm" c="dimmed">
+                ⭐ {product.rating}
+              </Text>
+              <Text size="sm" c="dimmed">
+                • {product.stock} in stock
+              </Text>
+            </Group>
+          </Card>
+        ))}
       </SimpleGrid>
     </Box>
   );

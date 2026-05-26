@@ -5,28 +5,23 @@ import { type ProductResponse } from './type'
 import { fetchProduct } from './api';
 import { useProduct, useProducts, useCategories } from './hook';
 import { Navigate, useNavigate } from 'react-router-dom';
-
+import { useState } from 'react';
+import type { Product } from "./type";
 
 
 const Products = () => {
+const {data: Categories} = useCategories();
+const [seletedCateg, setSelectedCate] = useState("")
+const navigate = useNavigate();
   const {
     data,
     isLoading,
     isError,
     error,
-  } = useProducts();
-
-// const Categories =   data?.products.map((info)=>(
-//   info.category
-// ))
-// const Categories = Array.from(
-//   new Set(data?.products.map((p)=>(p.category)))
-// )
+  } = useProducts(seletedCateg);
 
 
-const {data: Categories} = useCategories();
 
-const navigate = useNavigate();
 
   // console.log(data);
 if(isLoading){ 
@@ -42,7 +37,9 @@ if(isError){
       <Title order={1} mb="xl">
         Our Products
       </Title>
-      <select >
+      <select 
+      value={seletedCateg} 
+      onChange={(e)=>setSelectedCate(e.target.value)}>
       <option value="">All Categories</option>
       {Categories?.map((stuff)=>(
         <option key={stuff} value={stuff}>{stuff}</option>
@@ -53,7 +50,7 @@ if(isError){
       
       
       <Flex wrap="wrap" gap= "md" justify="flex-start" align="flex-start" >     
-        {data?.products.map((products)=>{
+        {data?.products.map((products:Product)=>{
           const{id,  title , price, stock , rating, thumbnail, description} = products
         return  <Card key={products.id} padding={'lg'} w={300} shadow='sm'>
            <Card.Section>

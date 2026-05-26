@@ -56,3 +56,22 @@ export interface CategoryResponse{
     products: Product[]
 
 }
+
+export type AddToCartPayload = {
+  id: number;
+  title: string;
+  price: number;
+};
+
+
+export type ProductInCart = {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+};
+
+export type Cart = {
+  id: number;
+  products: ProductInCart[];
+};

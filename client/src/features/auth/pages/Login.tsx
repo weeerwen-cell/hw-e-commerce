@@ -35,8 +35,9 @@ const Login = () => {
   const handleSub = async(value: typeof form.values)=>{
       
     try{  
-      await login(value.username, value.password);
-      console.log("login success"); 
+     const user = await login(value.username, value.password);
+       
+      console.log("login success + login.tsx"); 
       navigate("/products")    
       }catch(err){
          console.log("login fails", err);        
