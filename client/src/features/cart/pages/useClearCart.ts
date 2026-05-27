@@ -7,7 +7,7 @@ export const useClearCart = () => {
   return useMutation({
     mutationFn: async () => true,
     onSuccess: () => {
-      queryClient.setQueryData(["cart"], []);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 };

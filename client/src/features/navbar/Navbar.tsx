@@ -10,8 +10,20 @@ import { useNavigate } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 import { ThemeToggler } from "./ThemeToggler";
 import { useAuth } from "../auth/AuthContext";
+import { useCart } from "../cart/pages/useCart";
 
-export const Navbar = () => {
+type NarbarProps ={
+  onSearch:(query:string)=>void
+}
+
+
+
+export const Navbar = ({onSearch}:NarbarProps) => {
+
+  const {data: cart} = useCart()
+  const count = cart?.totalQuantity??0;
+
+
   const navigate = useNavigate();
   const { user, logout } = useAuth()
   console.log("navbar user:", user);
@@ -34,7 +46,8 @@ export const Navbar = () => {
 
       <Group>
         <ThemeToggler />
-        <Indicator label={1} size={16} color="red" position="middle-start">
+        <Indicator label={count} size={16} color="red" position="middle-start">
+          
           <Button
             variant="subtle"
             leftSection={<IconShoppingCart size={18} />}

@@ -14,16 +14,14 @@
 // };
 
 import { useQuery } from "@tanstack/react-query";
-import type { CartResponse, Cart } from "./cartType";
 
 export const useCart = () => {
-  return useQuery<Cart[]>({
+  return useQuery({
     queryKey: ["cart"],
     queryFn: async () => {
-      const res = await fetch("https://dummyjson.com/carts/user/5");
-      const data: CartResponse = await res.json();
-
-      return data.carts; // ⭐ 关键：只返回 carts array
+      const res = await fetch("https://dummyjson.com/carts/1");
+      const data = await res.json();
+      return data 
     },
   });
 };

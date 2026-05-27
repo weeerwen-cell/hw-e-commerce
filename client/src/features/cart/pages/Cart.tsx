@@ -12,8 +12,8 @@ import { useClearCart } from "./useClearCart";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { data: carts=[] } = useCart();
- 
+  const { data: cart } = useCart();
+ const products = cart?.products??[]
   
   
   const { mutate: removeItem } = useRemoveCartItem();
@@ -22,30 +22,30 @@ const Cart = () => {
   const navigate = useNavigate();
 
  
-const rows = carts.flatMap((cart) =>
-  (cart.products ?? []).slice(0,4).map((product) => (
-    <Table.Tr key={`${cart.id}-${product.id}`}>
-      <Table.Td>{product.title}</Table.Td>
-      <Table.Td>${product.price}</Table.Td>
-      <Table.Td>{product.quantity}</Table.Td>
-      <Table.Td>${product.price * product.quantity}</Table.Td>
+const rows = products.map((product:any) => (
+  <Table.Tr key={product.id}>
+    <Table.Td>{product.title}</Table.Td>
+    <Table.Td>${product.price}</Table.Td>
+    <Table.Td>{product.quantity}</Table.Td>
+    <Table.Td>${product.price * product.quantity}</Table.Td>
 
-      <Table.Td>
-        <Button
-          color="red"
-          onClick={() =>
-            removeItem({
-              cartId: cart.id,
-              productId: product.id,
-            })
-          }
+    <Table.Td>
+      <Button
+        color="red"
+        onClick={() =>
+          removeItem({
+            cartId: cart!.id,
+            productId: product.id,
+          })
+        }
         >
           remove
         </Button>
       </Table.Td>
     </Table.Tr>
   ))
-);
+// console.log("cart =", cart);
+// console.log("isArray =", Array.isArray(cart));
   return (
     <Container size="lg" py="xl">
       <Title order={1} mb="xl">
@@ -74,7 +74,7 @@ const rows = carts.flatMap((cart) =>
         Continue Shopping
       </Button>
 
-      {carts.length === 0 && (
+      {products.length === 0 && (
         <Card shadow="sm" padding="xl" radius="md" withBorder mt="md">
           <Text size="lg">Your cart is empty</Text>
           <Button mt="md" onClick={() => navigate("/products")}>

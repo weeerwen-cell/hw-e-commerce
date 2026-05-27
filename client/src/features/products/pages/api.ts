@@ -21,17 +21,26 @@ export const fetchProduct = async (id: number) => {
 };
 
 
-export const addCartApi = async (productId: number) => {
+export const addCartApi = async (payload: any) => {
   const res = await fetch(`${BASE_URL}/carts/add`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userId: 1,
-      products: [{ id: productId, quantity: 1 }],
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) throw new Error("fail to add cart");
 
   return res.json();
 };
+
+
+export const searchApi=async(query:string)=>{
+if(!query) return {products:[]}
+
+const res = await fetch(`${BASE_URL}/products/search?q=${encodeURIComponent(query)}`);
+if(!res.ok){
+  throw new Error("fail to search")
+}
+
+return res.json()
+}

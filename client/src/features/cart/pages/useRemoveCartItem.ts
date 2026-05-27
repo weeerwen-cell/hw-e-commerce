@@ -1,17 +1,4 @@
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { removeCartItem } from "./CartApi";
 
-// // export const useRemoveCartItem = () => {
-// //   const queryClient = useQueryClient();
-
-// //   return useMutation({
-// //     mutationFn: (id: number) => removeCartItem(id),
-
-// //     onSuccess: (updatedCarts) => {
-// //       queryClient.setQueryData(["cart"], updatedCarts);
-// //     },
-// //   });
-// // };
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Cart } from "./cartType";
 

@@ -2,8 +2,12 @@ import { Outlet } from 'react-router-dom';
 
 import { Footer } from './Footer';
 import { Navbar } from '../../features/navbar/Navbar';
+import { useState } from 'react';
 
 const RootLayout = () => {
+
+  const[searchQuery, setSearchQuery] = useState("")
+
   return (
     <div
       style={{
@@ -12,9 +16,9 @@ const RootLayout = () => {
         minHeight: '100vh',
       }}
     >
-      <Navbar />
+      <Navbar onSearch={setSearchQuery} />
       <main style={{ flex: 1 }}>
-        <Outlet />
+        <Outlet context={{searchQuery}}/>
       </main>
       <Footer />
     </div>
