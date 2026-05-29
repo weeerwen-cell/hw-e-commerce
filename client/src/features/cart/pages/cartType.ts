@@ -17,10 +17,10 @@ export type Cart = {
   totalQuantity: number;
 };
 
-export type CartResponse = {
-  carts: Cart[];
-  total: number;
-  skip: number;
-  limit: number;
-};
+// export type CartResponse = {
+//   carts: Cart[];
+//   total: number;
+//   skip: number;
+//   limit: number;
+// };
 

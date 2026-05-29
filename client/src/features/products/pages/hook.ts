@@ -28,3 +28,4 @@ export const useCategories = () => {
       Array.from(new Set(data.products.map((p) => p.category))),
   });
 };
+

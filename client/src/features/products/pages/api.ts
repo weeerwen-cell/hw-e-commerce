@@ -1,3 +1,6 @@
+import Products from "./Products";
+import type { ProductResponse } from "./type";
+
 const BASE_URL = "https://dummyjson.com";
 
 
@@ -8,9 +11,18 @@ export const fetchProducts = async (category?: string) => {
 
   const res = await fetch(url);
   if (!res.ok) throw new Error("failed to fetch products");
+  const data = await res.json()  
 
-  return res.json();
+  return data as ProductResponse
 };
+
+// export const fetchProducts = async () => {
+//   const res = await fetch("https://dummyjson.com/products");
+//   if (!res.ok) throw new Error("failed");
+//   return res.json();
+// };
+
+
 
 
 export const fetchProduct = async (id: number) => {
